@@ -7285,10 +7285,10 @@ exports.Crypt = Crypt;
 }).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/crypt.js","/")
 },{"1YiZ5S":6,"buffer":3,"extend":2,"querystring":10,"superagent":12,"url":11}],18:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-ripple = null;
-module.exports = require('./vaultclient');
+//ripple = null;
+ window.rippleVaultClient = window.rippleVaultClient || require('./vaultclient');
 
-}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_64d18081.js","/")
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_761b1d3e.js","/")
 },{"./vaultclient":21,"1YiZ5S":6,"buffer":3}],19:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var request   = require('superagent');
