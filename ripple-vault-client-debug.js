@@ -2548,11 +2548,12 @@ var rippleVaultClient =
 	var UInt160     = ripple.UInt160;
 	var UInt256     = ripple.UInt256;
 	var request     = __webpack_require__(12);
-	var querystring = __webpack_require__(10);
+	var querystring = __webpack_require__(11);
 	var extend      = __webpack_require__(9);
-	var parser      = __webpack_require__(11);
+	var parser      = __webpack_require__(10);
 	var Crypt       = { };
 
+	var SJCL_PARANOIA_256_BITS = 6;
 	var cryptConfig = {
 	  cipher : 'aes',
 	  mode   : 'ccm',
@@ -2605,11 +2606,7 @@ var rippleVaultClient =
 	 * @param {number} nWords
 	 */
 	function randomWords (nWords) {
-	  for (var i = 0; i < 8; i++) {
-	    sjcl.random.addEntropy(Math.random(), 32, "Math.random()");
-	  }  
-	  
-	  return sjcl.random.randomWords(nWords);  
+	  return sjcl.random.randomWords(nWords, SJCL_PARANOIA_256_BITS);
 	}
 
 	/****** exposed functions ******/
@@ -2659,7 +2656,7 @@ var rippleVaultClient =
 	  var iRandom;
 
 	  for (;;) {
-	    iRandom = sjcl.bn.random(iModulus, 0);
+	    iRandom = sjcl.bn.random(iModulus, SJCL_PARANOIA_256_BITS);
 	    if (iRandom.jacobi(iModulus) === 1) {
 	      break;
 	    }
@@ -2884,9 +2881,9 @@ var rippleVaultClient =
 
 	var Crypt   = __webpack_require__(6).Crypt;
 	var Message = ripple.Message;
-	var parser  = __webpack_require__(11);
+	var parser  = __webpack_require__(10);
 	var extend  = __webpack_require__(9);
-	var querystring = __webpack_require__(10);
+	var querystring = __webpack_require__(11);
 
 	var SignedRequest = function (config) {
 	  // XXX Constructor should be generalized and constructing from an Angular.js
@@ -4308,16 +4305,6 @@ var rippleVaultClient =
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.decode = exports.parse = __webpack_require__(13);
-	exports.encode = exports.stringify = __webpack_require__(14);
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// Copyright Joyent, Inc. and other Node contributors.
 	//
 	// Permission is hereby granted, free of charge, to any person obtaining a
@@ -4411,7 +4398,7 @@ var rippleVaultClient =
 	      'gopher:': true,
 	      'file:': true
 	    },
-	    querystring = __webpack_require__(10);
+	    querystring = __webpack_require__(11);
 
 	function urlParse(url, parseQueryString, slashesDenoteHost) {
 	  if (url && isObject(url) && url instanceof Url) return url;
@@ -5028,6 +5015,16 @@ var rippleVaultClient =
 
 
 /***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.decode = exports.parse = __webpack_require__(13);
+	exports.encode = exports.stringify = __webpack_require__(14);
+
+
+/***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -5035,8 +5032,8 @@ var rippleVaultClient =
 	 * Module dependencies.
 	 */
 
-	var Emitter = __webpack_require__(17);
-	var reduce = __webpack_require__(18);
+	var Emitter = __webpack_require__(18);
+	var reduce = __webpack_require__(17);
 
 	/**
 	 * Root reference for iframes.
@@ -6928,6 +6925,35 @@ var rippleVaultClient =
 
 	
 	/**
+	 * Reduce `arr` with `fn`.
+	 *
+	 * @param {Array} arr
+	 * @param {Function} fn
+	 * @param {Mixed} initial
+	 *
+	 * TODO: combatible error handling?
+	 */
+
+	module.exports = function(arr, fn, initial){  
+	  var idx = 0;
+	  var len = arr.length;
+	  var curr = arguments.length == 3
+	    ? initial
+	    : arr[idx++];
+
+	  while (idx < len) {
+	    curr = fn.call(null, curr, arr[idx], ++idx, arr);
+	  }
+	  
+	  return curr;
+	};
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
 	 * Expose `Emitter`.
 	 */
 
@@ -7091,35 +7117,6 @@ var rippleVaultClient =
 	  return !! this.listeners(event).length;
 	};
 
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * Reduce `arr` with `fn`.
-	 *
-	 * @param {Array} arr
-	 * @param {Function} fn
-	 * @param {Mixed} initial
-	 *
-	 * TODO: combatible error handling?
-	 */
-
-	module.exports = function(arr, fn, initial){  
-	  var idx = 0;
-	  var len = arr.length;
-	  var curr = arguments.length == 3
-	    ? initial
-	    : arr[idx++];
-
-	  while (idx < len) {
-	    curr = fn.call(null, curr, arr[idx], ++idx, arr);
-	  }
-	  
-	  return curr;
-	};
 
 /***/ },
 /* 19 */

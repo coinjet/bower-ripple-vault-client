@@ -687,7 +687,7 @@ var rippleVaultClient =
 	var crypt   = __webpack_require__(6).Crypt;
 	var SignedRequest = __webpack_require__(7).SignedRequest;
 	var request = __webpack_require__(12);
-	var extend  = __webpack_require__(9);
+	var extend  = __webpack_require__(10);
 	var async   = __webpack_require__(8);
 	var BlobClient = {};
 
@@ -2548,11 +2548,12 @@ var rippleVaultClient =
 	var UInt160     = ripple.UInt160;
 	var UInt256     = ripple.UInt256;
 	var request     = __webpack_require__(12);
-	var querystring = __webpack_require__(10);
-	var extend      = __webpack_require__(9);
+	var querystring = __webpack_require__(9);
+	var extend      = __webpack_require__(10);
 	var parser      = __webpack_require__(11);
 	var Crypt       = { };
 
+	var SJCL_PARANOIA_256_BITS = 6;
 	var cryptConfig = {
 	  cipher : 'aes',
 	  mode   : 'ccm',
@@ -2605,11 +2606,7 @@ var rippleVaultClient =
 	 * @param {number} nWords
 	 */
 	function randomWords (nWords) {
-	  for (var i = 0; i < 8; i++) {
-	    sjcl.random.addEntropy(Math.random(), 32, "Math.random()");
-	  }  
-	  
-	  return sjcl.random.randomWords(nWords);  
+	  return sjcl.random.randomWords(nWords, SJCL_PARANOIA_256_BITS);
 	}
 
 	/****** exposed functions ******/
@@ -2659,7 +2656,7 @@ var rippleVaultClient =
 	  var iRandom;
 
 	  for (;;) {
-	    iRandom = sjcl.bn.random(iModulus, 0);
+	    iRandom = sjcl.bn.random(iModulus, SJCL_PARANOIA_256_BITS);
 	    if (iRandom.jacobi(iModulus) === 1) {
 	      break;
 	    }
@@ -2885,8 +2882,8 @@ var rippleVaultClient =
 	var Crypt   = __webpack_require__(6).Crypt;
 	var Message = ripple.Message;
 	var parser  = __webpack_require__(11);
-	var extend  = __webpack_require__(9);
-	var querystring = __webpack_require__(10);
+	var extend  = __webpack_require__(10);
+	var querystring = __webpack_require__(9);
 
 	var SignedRequest = function (config) {
 	  // XXX Constructor should be generalized and constructing from an Angular.js
@@ -4221,6 +4218,16 @@ var rippleVaultClient =
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	exports.decode = exports.parse = __webpack_require__(13);
+	exports.encode = exports.stringify = __webpack_require__(14);
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var hasOwn = Object.prototype.hasOwnProperty;
 	var toString = Object.prototype.toString;
 	var undefined;
@@ -4302,16 +4309,6 @@ var rippleVaultClient =
 		return target;
 	};
 
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.decode = exports.parse = __webpack_require__(13);
-	exports.encode = exports.stringify = __webpack_require__(14);
 
 
 /***/ },
@@ -4411,7 +4408,7 @@ var rippleVaultClient =
 	      'gopher:': true,
 	      'file:': true
 	    },
-	    querystring = __webpack_require__(10);
+	    querystring = __webpack_require__(9);
 
 	function urlParse(url, parseQueryString, slashesDenoteHost) {
 	  if (url && isObject(url) && url instanceof Url) return url;
