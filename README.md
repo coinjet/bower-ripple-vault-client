@@ -1,4 +1,4 @@
-# bower-ripple-vault-client
+# bower-divvy-vault-client
 
 This repo is for distribution on `bower`. The source for this module is in the
 [main ripple-vault-client repo](https://github.com/ripple/ripple-vault-client).
